@@ -19,6 +19,9 @@ export default class {
     }
 
     draw() {
+        this.context.fillStyle = '#55dfc0';
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
         this.context.beginPath();
         this.context.moveTo(50, 50);
         this.context.lineTo(100, 100);
