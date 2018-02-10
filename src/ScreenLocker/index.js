@@ -1,4 +1,4 @@
-import Circle from "./Circle";
+import KeepersController from "./KeepersController";
 
 export default class {
     constructor() {
@@ -7,8 +7,24 @@ export default class {
 
         this.resizeCanvas = this.resizeCanvas.bind(this);
 
+        // Initialize keepers
+        this.keepersController = new KeepersController(this.context, {rows: 3, columns: 3});
+
+        this.initListeners();
         this.resizeCanvas();
+    }
+
+    initListeners() {
         window.addEventListener('resize', this.resizeCanvas, false);
+
+        this.canvas.onmousedown = (event) => {
+            const mousePos = {
+                x: event.clientX,
+                y: event.clientY
+            };
+            // TODO: Check for collision in keepersController
+            this.keepersController.checkIntersection(mousePos);
+        }
     }
 
     resizeCanvas() {
@@ -19,18 +35,11 @@ export default class {
     }
 
     draw() {
-        this.context.fillStyle = '#55dfc0';
+        // Fill canvas with bg color
+        this.context.fillStyle = 'rgb(1, 38, 102)';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.context.beginPath();
-        this.context.moveTo(50, 50);
-        this.context.lineTo(100, 100);
-        this.context.stroke();
-
-        const circle = new Circle(this.context, {
-            x: 100,
-            y: 100
-        });
-        circle.draw();
+        // Draw keepers
+        this.keepersController.draw();
     }
 }
