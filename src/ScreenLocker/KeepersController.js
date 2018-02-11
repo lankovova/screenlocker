@@ -27,6 +27,7 @@ export default class KeepersController {
                 this.keepers.push(
                     new Keeper(
                         this.context, {
+                            id: this.keepers.length,
                             pos: new Point(keeperX, keeperY),
                             radius: RADIUS,
                             color: 'rgb(153,21,242)'
@@ -41,10 +42,10 @@ export default class KeepersController {
         this.keepers.forEach(keeper => keeper.draw());
     }
 
-    checkIntersection(point, todo) {
+    checkIntersection(point, keeperClicked) {
         this.keepers.forEach((keeper, index) => {
             if (keeper.isIntersect(point)) {
-                todo(this.keepers[index]);
+                keeperClicked(this.keepers[index]);
             }
         });
     }
@@ -52,11 +53,13 @@ export default class KeepersController {
     mouseClicked(point) {
         this.checkIntersection(point, (keeper) => {
             holdedKeeper = keeper;
+            // TODO: Add to lock path
         });
     }
 
-    releaseMouse() {
+    mouseReleased() {
         holdedKeeper = undefined;
+        // TODO: Clear lock path
     }
 
     mousePressedAndMoved(point, redrawCanvas) {
@@ -68,7 +71,9 @@ export default class KeepersController {
             this.checkIntersection(point, (keeper) => {
                 // FIXME: Replace with current keeper
                 if (keeper != holdedKeeper) {
-                    console.log('move inside new keeper ' + keeper);
+                    console.log('move inside new keeper ' + keeper.id);
+                    // TODO: Add to lock path
+                    // TODO: Set new current holded keeper
                 }
             });
         }

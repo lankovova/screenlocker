@@ -2,6 +2,7 @@ export default class Keeper {
     constructor(context, props) {
         this.context = context;
 
+        this.id = props.id;
         this.center = props.pos;
         this.color = props.color;
         this.radius = props.radius;

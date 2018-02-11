@@ -23,7 +23,7 @@ export default class {
         this.canvas.onmouseup = () => {
             // Redraw full canvas
             this.draw();
-            this.keepersController.releaseMouse();
+            this.keepersController.mouseReleased();
             mousePressed = false;
         }
         this.canvas.onmousedown = (event) => {
@@ -42,7 +42,7 @@ export default class {
         this.canvas.onmouseleave = () => {
             // Redraw full canvas
             this.draw();
-            this.keepersController.releaseHoldedKeeper();
+            this.keepersController.mouseReleased();
             mousePressed = false;
         }
     }
