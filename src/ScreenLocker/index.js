@@ -54,7 +54,7 @@ export default class {
     pointerLeave() {
         pointerPressed = false;
         if (this.keepersController.passEntered()) {
-            const bgColor = this.keepersController.submitPass() ? 'rgb(0,150,0)' : 'rgb(150,0,0)';
+            const bgColor = this.keepersController.submitPass() ? 'rgba(0,150,0,0.5)' : 'rgba(150,0,0,0.7)';
             // Redraw full canvas
             this.draw(bgColor);
         } else {
