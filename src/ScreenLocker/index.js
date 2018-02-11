@@ -1,4 +1,7 @@
 import KeepersController from "./KeepersController";
+import Point from "./Point";
+
+let mousePressed = false;
 
 export default class {
     constructor() {
@@ -17,13 +20,30 @@ export default class {
     initListeners() {
         window.addEventListener('resize', this.resizeCanvas, false);
 
+        this.canvas.onmouseup = () => {
+            // Redraw full canvas
+            this.draw();
+            this.keepersController.releaseHoldedKeeper();
+            mousePressed = false;
+        }
         this.canvas.onmousedown = (event) => {
-            const mousePos = {
-                x: event.clientX,
-                y: event.clientY
-            };
-            // TODO: Check for collision in keepersController
+            const mousePos = new Point(event.clientX, event.clientY);
+            // Check intersection in keepers
             this.keepersController.checkIntersection(mousePos);
+            mousePressed = true;
+        }
+        this.canvas.onmousemove = (event) => {
+            if (mousePressed) {
+                const mousePos = new Point(event.clientX, event.clientY);
+                // Check intersection in keepers
+                this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
+            }
+        }
+        this.canvas.onmouseleave = () => {
+            // Redraw full canvas
+            this.draw();
+            this.keepersController.releaseHoldedKeeper();
+            mousePressed = false;
         }
     }
 

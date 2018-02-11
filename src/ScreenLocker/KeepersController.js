@@ -1,10 +1,13 @@
 import Keeper from "./Keeper";
 import Point from "./Point";
+import {drawLine} from './utils';
 
 export const RADIUS = 20;
 export const OFFSET_BETWEEN_CIRCLES = 20;
 export const MARGIN_FROM_LEFT_SIDE = 50;
 export const MARGIN_FROM_TOP_SIDE = 50;
+
+let holdedKeeper;
 
 export default class KeepersController {
     constructor(context, props) {
@@ -23,8 +26,7 @@ export default class KeepersController {
                 // Add new keeper to row
                 this.keepers.push(
                     new Keeper(
-                        this.context,
-                        {
+                        this.context, {
                             pos: new Point(keeperX, keeperY),
                             radius: RADIUS,
                             color: 'rgba(53,121,232,0.5)'
@@ -42,9 +44,20 @@ export default class KeepersController {
     checkIntersection(point) {
         this.keepers.forEach((keeper, index) => {
             if (keeper.isIntersect(point)) {
-                console.log(`Mouse pressed on keeper ${index}`);
+                holdedKeeper = this.keepers[index];
             }
         });
+    }
+
+    releaseHoldedKeeper() {
+        holdedKeeper = undefined;
+    }
+
+    mousePressedAndMoved(point, redrawCanvas) {
+        if (holdedKeeper) {
+            redrawCanvas();
+            drawLine(this.context, holdedKeeper.center, point);
+        }
     }
 
 }
