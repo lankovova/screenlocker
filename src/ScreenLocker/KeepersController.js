@@ -1,13 +1,13 @@
 import Keeper from "./Keeper";
 import Point from "./Point";
-import {drawLine} from './utils';
+import {drawLine, arraysAreEqual} from './utils';
 
 export const RADIUS = 20;
 export const OFFSET_BETWEEN_CIRCLES = 20;
 export const MARGIN_FROM_LEFT_SIDE = 50;
 export const MARGIN_FROM_TOP_SIDE = 50;
 
-let holdedKeeper;
+export const PASS = [7, 3, 1, 5, 4, 8];
 
 export default class KeepersController {
     constructor(context, props) {
@@ -66,6 +66,16 @@ export default class KeepersController {
     }
 
     mouseReleased() {
+        // Get current lock path password
+        const enteredPass = this.lockpath.map(k => k.id);
+
+        // Check for if pass is correct
+        if (arraysAreEqual(enteredPass, PASS)) {
+            console.log('Lock opened');
+        } else {
+            console.log('Wrong pass');
+        }
+
         // Clear lockpath
         this.lockpath = [];
     }
