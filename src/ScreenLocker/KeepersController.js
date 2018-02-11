@@ -18,6 +18,8 @@ export default class KeepersController {
 
         this.keepers = [];
 
+        this.lockpath = [];
+
         // Initialize keepres
         for (let i = 0; i < this.rows; i++) {
             let keeperY = MARGIN_FROM_TOP_SIDE + RADIUS + i * (RADIUS * 2 + OFFSET_BETWEEN_CIRCLES);
@@ -52,29 +54,35 @@ export default class KeepersController {
 
     mouseClicked(point) {
         this.checkIntersection(point, (keeper) => {
-            holdedKeeper = keeper;
             // TODO: Add to lock path
+            this.lockpath.push(keeper);
         });
     }
 
     mouseReleased() {
-        holdedKeeper = undefined;
         // TODO: Clear lock path
+        this.lockpath = [];
     }
 
     mousePressedAndMoved(point, redrawCanvas) {
-        if (holdedKeeper) {
+        // Get last/current lockpath keeper
+        const currentPathKeeper = this.lockpath[this.lockpath.length - 1];
+
+        if (currentPathKeeper) {
             redrawCanvas();
-            drawLine(this.context, holdedKeeper.center, point);
+            drawLine(this.context, currentPathKeeper.center, point);
 
             // Check if mouse has entered in a new keeper
             this.checkIntersection(point, (keeper) => {
-                // FIXME: Replace with current keeper
-                if (keeper != holdedKeeper) {
+                // Add only uniqe keepers to lock path
+                if (!this.lockpath.find(inPathKeeper => inPathKeeper === keeper)) {
                     console.log('move inside new keeper ' + keeper.id);
-                    // TODO: Add to lock path
-                    // TODO: Set new current holded keeper
+                    // Add new picked keeper to lockpath
+                    this.lockpath.push(keeper);
+
+                    // TODO: Draw path between all lockpath keepers
                 }
+
             });
         }
     }
