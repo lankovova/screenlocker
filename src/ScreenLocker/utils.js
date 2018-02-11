@@ -21,6 +21,9 @@ export function arraysAreEqual(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
 }
 
+/**
+ * Check if user is using touch device
+*/
 export function isTouchDevice() {
     return 'ontouchstart' in document.documentElement;
 }
