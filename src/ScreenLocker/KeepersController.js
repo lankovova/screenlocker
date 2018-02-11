@@ -70,16 +70,18 @@ export default class KeepersController {
     }
 
     passIsCorrect() {
-        if (this.lockpath.length === 0) return;
+        if (this.passEntered()) {
+            // Get current lock path password
+            const enteredPass = this.lockpath.map(k => k.id);
 
-        // Get current lock path password
-        const enteredPass = this.lockpath.map(k => k.id);
+            // Clear lockpath
+            this.lockpath = [];
 
-        // Clear lockpath
-        this.lockpath = [];
-
-        // Check pass
-        return arraysAreEqual(enteredPass, PASS);
+            // Check pass
+            return arraysAreEqual(enteredPass, PASS);
+        } else {
+            return false;
+        }
     }
 
     moveLine(point, redrawCanvas) {
