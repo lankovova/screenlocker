@@ -86,9 +86,6 @@ export default class KeepersController {
 
         // If there is at least one keeper in the path
         if (currentPathKeeper) {
-            // Redraw whole canvas
-            redrawCanvas();
-
             // Check if mouse has entered in a new keeper
             this.checkIntersection(point, (keeper) => {
                 // Add only uniqe keepers to lock path
@@ -98,9 +95,10 @@ export default class KeepersController {
                 }
             });
 
+            // Redraw whole canvas
+            redrawCanvas();
             // Draw path between all lockpath keepers
             this.drawLockPath();
-
             // Draw line between current holded keeper and mouse
             drawLine(this.context, this.lockpath[this.lockpath.length - 1].center, point);
         }
