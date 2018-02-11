@@ -29,7 +29,7 @@ export default class {
         this.canvas.onmousedown = (event) => {
             const mousePos = new Point(event.clientX, event.clientY);
             // Check intersection in keepers
-            this.keepersController.checkIntersection(mousePos);
+            this.keepersController.mouseClicked(mousePos);
             mousePressed = true;
         }
         this.canvas.onmousemove = (event) => {
@@ -59,7 +59,7 @@ export default class {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Fill canvas with bg color
-        this.context.fillStyle = 'rgb(1, 38, 102)';
+        this.context.fillStyle = 'rgb(200, 200, 200)';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw keepers
