@@ -54,13 +54,13 @@ export default class KeepersController {
 
     mouseClicked(point) {
         this.checkIntersection(point, (keeper) => {
-            // TODO: Add to lock path
+            // Add starting keeper to lockpath
             this.lockpath.push(keeper);
         });
     }
 
     mouseReleased() {
-        // TODO: Clear lock path
+        // Clear lockpath
         this.lockpath = [];
     }
 
@@ -70,7 +70,6 @@ export default class KeepersController {
 
         if (currentPathKeeper) {
             redrawCanvas();
-            drawLine(this.context, currentPathKeeper.center, point);
 
             // Check if mouse has entered in a new keeper
             this.checkIntersection(point, (keeper) => {
@@ -84,6 +83,8 @@ export default class KeepersController {
                 }
 
             });
+
+            drawLine(this.context, currentPathKeeper.center, point);
         }
     }
 
