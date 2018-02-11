@@ -131,7 +131,7 @@ export default class KeepersController {
                 }
                 break;
             }
-            case STATES.IDLE: { break; }
+            case STATES.IDLE:
             case STATES.DO_NOTHING: { break; }
             default: { console.warn(`Unhandeled KeepersContorller state: ${this.STATE}`) }
         }
