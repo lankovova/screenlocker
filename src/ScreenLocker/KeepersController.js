@@ -58,32 +58,31 @@ export default class KeepersController {
         });
     }
 
-    mouseClicked(point) {
+    startTyping(point) {
         this.checkIntersection(point, (keeper) => {
             // Add starting keeper to lockpath
             this.lockpath.push(keeper);
         });
     }
 
-    mouseReleased() {
-        // Skip if lockpath is empty
+    passEntered() {
+        return this.lockpath.length !== 0;
+    }
+
+    passIsCorrect() {
         if (this.lockpath.length === 0) return;
 
         // Get current lock path password
         const enteredPass = this.lockpath.map(k => k.id);
 
-        // Check for if pass is correct
-        if (arraysAreEqual(enteredPass, PASS)) {
-            console.log('Lock opened');
-        } else {
-            console.log('Wrong pass');
-        }
-
         // Clear lockpath
         this.lockpath = [];
+
+        // Check pass
+        return arraysAreEqual(enteredPass, PASS);
     }
 
-    mousePressedAndMoved(point, redrawCanvas) {
+    moveLine(point, redrawCanvas) {
         // Get last/current lockpath keeper
         const currentPathKeeper = this.lockpath[this.lockpath.length - 1];
 

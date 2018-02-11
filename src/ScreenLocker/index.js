@@ -2,7 +2,7 @@ import KeepersController from "./KeepersController";
 import Point from "./Point";
 import {isTouchDevice} from './utils';
 
-let mousePressed = false;
+let pointerPressed = false;
 
 export default class {
     constructor() {
@@ -22,57 +22,41 @@ export default class {
         window.addEventListener('resize', this.resizeCanvas, false);
 
         if (isTouchDevice()) {
-            this.canvas.ontouchend = () => {
-                // Redraw full canvas
-                this.draw();
-                this.keepersController.mouseReleased();
-                mousePressed = false;
-            }
-            this.canvas.ontouchstart = (event) => {
-                const mousePos = new Point(event.touches[0].clientX, event.touches[0].clientY);
-                // Check intersection in keepers
-                this.keepersController.mouseClicked(mousePos);
-                mousePressed = true;
-            }
-            this.canvas.ontouchmove = (event) => {
-                if (mousePressed) {
-                    const mousePos = new Point(event.touches[0].clientX, event.touches[0].clientY);
-                    // Check intersection in keepers
-                    this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
-                }
-            }
-            this.canvas.ontouchcancel = () => {
-                // Redraw full canvas
-                this.draw();
-                this.keepersController.mouseReleased();
-                mousePressed = false;
-            }
+            this.canvas.ontouchstart = (e) => this.pointerClick(e.touches[0]);
+            this.canvas.ontouchmove = (e) => this.pointerMove(e.touches[0]);
+            this.canvas.ontouchend = () => this.pointerLeave();
+            this.canvas.ontouchcancel = () => this.pointerLeave();
         } else {
-            this.canvas.onmouseup = () => {
-                // Redraw full canvas
-                this.draw();
-                this.keepersController.mouseReleased();
-                mousePressed = false;
-            }
-            this.canvas.onmousedown = (event) => {
-                const mousePos = new Point(event.clientX, event.clientY);
-                // Check intersection in keepers
-                this.keepersController.mouseClicked(mousePos);
-                mousePressed = true;
-            }
-            this.canvas.onmousemove = (event) => {
-                if (mousePressed) {
-                    const mousePos = new Point(event.clientX, event.clientY);
-                    // Check intersection in keepers
-                    this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
-                }
-            }
-            this.canvas.onmouseleave = () => {
-                // Redraw full canvas
-                this.draw();
-                this.keepersController.mouseReleased();
-                mousePressed = false;
-            }
+            this.canvas.onmousedown = (e) => this.pointerClick(e);
+            this.canvas.onmousemove = (e) => this.pointerMove(e);
+            this.canvas.onmouseup = () => this.pointerLeave();
+            this.canvas.onmouseleave = () => this.pointerLeave();
+        }
+    }
+
+    pointerClick(event) {
+        // Redraw canvas
+        this.draw();
+        pointerPressed = true;
+        const mousePos = new Point(event.clientX, event.clientY);
+        // Check intersection in keepers
+        this.keepersController.startTyping(mousePos);
+    }
+    pointerMove(event) {
+        if (pointerPressed) {
+            const mousePos = new Point(event.clientX, event.clientY);
+            // Check intersection in keepers
+            this.keepersController.moveLine(mousePos, () => this.draw());
+        }
+    }
+    pointerLeave() {
+        pointerPressed = false;
+        if (this.keepersController.passEntered()) {
+            const bgColor = this.keepersController.passIsCorrect() ? 'rgb(0,150,0)' : 'rgb(150,0,0)';
+            // Redraw full canvas
+            this.draw(bgColor);
+        } else {
+            this.draw();
         }
     }
 
@@ -83,12 +67,12 @@ export default class {
         this.draw();
     }
 
-    draw() {
+    draw(bg='rgb(200, 200, 200)') {
         // Clear canvas
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Fill canvas with bg color
-        this.context.fillStyle = 'rgb(200, 200, 200)';
+        this.context.fillStyle = bg;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw keepers
