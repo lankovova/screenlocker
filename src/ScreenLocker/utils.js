@@ -18,5 +18,5 @@ export function drawLine(context, from, to) {
  * @returns {Boolean} Returns true if arrays are equal, otherwise - returns false
  */
 export function arraysAreEqual(a, b) {
-    return (JSON.stringify(a) === JSON.stringify(b)) ? true : false;
+    return JSON.stringify(a) === JSON.stringify(b);
 }
