@@ -23,7 +23,7 @@ export default class {
         this.canvas.onmouseup = () => {
             // Redraw full canvas
             this.draw();
-            this.keepersController.releaseHoldedKeeper();
+            this.keepersController.releaseMouse();
             mousePressed = false;
         }
         this.canvas.onmousedown = (event) => {

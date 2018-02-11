@@ -55,7 +55,7 @@ export default class KeepersController {
         });
     }
 
-    releaseHoldedKeeper() {
+    releaseMouse() {
         holdedKeeper = undefined;
     }
 
