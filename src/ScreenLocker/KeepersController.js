@@ -43,6 +43,13 @@ export default class KeepersController {
         this.keepers.forEach(keeper => keeper.draw());
     }
 
+    drawLockPath() {
+        this.lockpath.reduce((curr, next) => {
+            drawLine(this.context, curr.center, next.center);
+            return next;
+        });
+    }
+
     checkIntersection(point, intersectionWithKeeper) {
         this.keepers.forEach((keeper, index) => {
             if (keeper.isIntersect(point)) {
@@ -67,23 +74,25 @@ export default class KeepersController {
         // Get last/current lockpath keeper
         const currentPathKeeper = this.lockpath[this.lockpath.length - 1];
 
+        // If there is at least one keeper in the path
         if (currentPathKeeper) {
+            // Redraw whole canvas
             redrawCanvas();
 
             // Check if mouse has entered in a new keeper
             this.checkIntersection(point, (keeper) => {
                 // Add only uniqe keepers to lock path
                 if (!this.lockpath.find(inPathKeeper => inPathKeeper === keeper)) {
-                    console.log('move inside new keeper ' + keeper.id);
                     // Add new picked keeper to lockpath
                     this.lockpath.push(keeper);
-
-                    // TODO: Draw path between all lockpath keepers
                 }
-
             });
 
-            drawLine(this.context, currentPathKeeper.center, point);
+            // Draw path between all lockpath keepers
+            this.drawLockPath();
+
+            // Draw line between current holded keeper and mouse
+            drawLine(this.context, this.lockpath[this.lockpath.length - 1].center, point);
         }
     }
 
