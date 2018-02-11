@@ -4,8 +4,6 @@ import {drawLine, arraysAreEqual} from './utils';
 
 export const RADIUS = 20;
 export const OFFSET_BETWEEN_CIRCLES = 20;
-export const MARGIN_FROM_LEFT_SIDE = 50;
-export const MARGIN_FROM_TOP_SIDE = 50;
 
 export const PASS = [7, 3, 1, 5, 4, 8];
 
@@ -33,9 +31,13 @@ export default class KeepersController {
     initializeKeepers() {
         // Initialize keepres
         for (let i = 0; i < this.rows; i++) {
-            let keeperY = MARGIN_FROM_TOP_SIDE + RADIUS + i * (RADIUS * 2 + OFFSET_BETWEEN_CIRCLES);
+            const topOffset = (this.context.canvas.height / 2) - this.columns * RADIUS;
+            const keeperY = topOffset + i * (RADIUS * 2 + OFFSET_BETWEEN_CIRCLES);
+
             for (let j = 0; j < this.columns; j++) {
-                let keeperX = MARGIN_FROM_LEFT_SIDE + RADIUS + j * (RADIUS * 2 + OFFSET_BETWEEN_CIRCLES);
+                const leftOffset = (this.context.canvas.width / 2) - this.rows * RADIUS;
+                const keeperX = leftOffset + j * (RADIUS * 2 + OFFSET_BETWEEN_CIRCLES);
+
                 // Add new keeper to row
                 this.keepers.push(new Keeper(
                                     this.context, {

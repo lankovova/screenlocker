@@ -11,11 +11,13 @@ export default class {
 
         this.resizeCanvas = this.resizeCanvas.bind(this);
 
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
         // Initialize keepers
         this.keepersController = new KeepersController(this.context, {rows: 3, columns: 3});
 
         this.initListeners();
-        this.resizeCanvas();
     }
 
     initListeners() {
