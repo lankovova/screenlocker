@@ -20,3 +20,7 @@ export function drawLine(context, from, to) {
 export function arraysAreEqual(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
 }
+
+export function isTouchDevice() {
+    return 'ontouchstart' in document.documentElement;
+}

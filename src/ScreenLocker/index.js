@@ -1,5 +1,6 @@
 import KeepersController from "./KeepersController";
 import Point from "./Point";
+import {isTouchDevice} from './utils';
 
 let mousePressed = false;
 
@@ -20,30 +21,58 @@ export default class {
     initListeners() {
         window.addEventListener('resize', this.resizeCanvas, false);
 
-        this.canvas.onmouseup = () => {
-            // Redraw full canvas
-            this.draw();
-            this.keepersController.mouseReleased();
-            mousePressed = false;
-        }
-        this.canvas.onmousedown = (event) => {
-            const mousePos = new Point(event.clientX, event.clientY);
-            // Check intersection in keepers
-            this.keepersController.mouseClicked(mousePos);
-            mousePressed = true;
-        }
-        this.canvas.onmousemove = (event) => {
-            if (mousePressed) {
+        if (isTouchDevice()) {
+            this.canvas.ontouchend = () => {
+                // Redraw full canvas
+                this.draw();
+                this.keepersController.mouseReleased();
+                mousePressed = false;
+            }
+            this.canvas.ontouchstart = (event) => {
+                const mousePos = new Point(event.touches[0].clientX, event.touches[0].clientY);
+                // Check intersection in keepers
+                this.keepersController.mouseClicked(mousePos);
+                mousePressed = true;
+            }
+            this.canvas.ontouchmove = (event) => {
+                if (mousePressed) {
+                    const mousePos = new Point(event.touches[0].clientX, event.touches[0].clientY);
+                    // Check intersection in keepers
+                    this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
+                }
+            }
+            this.canvas.ontouchcancel = () => {
+                // Redraw full canvas
+                this.draw();
+                this.keepersController.mouseReleased();
+                mousePressed = false;
+            }
+        } else {
+            this.canvas.onmouseup = () => {
+                // Redraw full canvas
+                this.draw();
+                this.keepersController.mouseReleased();
+                mousePressed = false;
+            }
+            this.canvas.onmousedown = (event) => {
                 const mousePos = new Point(event.clientX, event.clientY);
                 // Check intersection in keepers
-                this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
+                this.keepersController.mouseClicked(mousePos);
+                mousePressed = true;
             }
-        }
-        this.canvas.onmouseleave = () => {
-            // Redraw full canvas
-            this.draw();
-            this.keepersController.mouseReleased();
-            mousePressed = false;
+            this.canvas.onmousemove = (event) => {
+                if (mousePressed) {
+                    const mousePos = new Point(event.clientX, event.clientY);
+                    // Check intersection in keepers
+                    this.keepersController.mousePressedAndMoved(mousePos, () => this.draw());
+                }
+            }
+            this.canvas.onmouseleave = () => {
+                // Redraw full canvas
+                this.draw();
+                this.keepersController.mouseReleased();
+                mousePressed = false;
+            }
         }
     }
 
