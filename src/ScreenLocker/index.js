@@ -55,6 +55,9 @@ export default class {
     }
 
     draw() {
+        // Clear canvas
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         // Fill canvas with bg color
         this.context.fillStyle = 'rgb(1, 38, 102)';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
