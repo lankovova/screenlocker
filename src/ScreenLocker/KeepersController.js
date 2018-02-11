@@ -17,7 +17,6 @@ export default class KeepersController {
         this.columns = props.columns;
 
         this.keepers = [];
-
         this.lockpath = [];
 
         // Initialize keepres
@@ -44,10 +43,10 @@ export default class KeepersController {
         this.keepers.forEach(keeper => keeper.draw());
     }
 
-    checkIntersection(point, keeperClicked) {
+    checkIntersection(point, intersectionWithKeeper) {
         this.keepers.forEach((keeper, index) => {
             if (keeper.isIntersect(point)) {
-                keeperClicked(this.keepers[index]);
+                intersectionWithKeeper(this.keepers[index]);
             }
         });
     }
