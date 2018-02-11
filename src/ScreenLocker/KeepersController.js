@@ -66,6 +66,9 @@ export default class KeepersController {
     }
 
     mouseReleased() {
+        // Skip if lockpath is empty
+        if (this.lockpath.length === 0) return;
+
         // Get current lock path password
         const enteredPass = this.lockpath.map(k => k.id);
 
